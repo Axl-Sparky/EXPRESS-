@@ -1,11 +1,8 @@
 const express = require('express')
+const app = express()
 
-const app = express() // the main app
-const admin = express() // the sub app
-
-admin.get('/', (req, res) => {
-  console.log(admin.mountpath) // /admin
-  res.send('Admin Homepage')
+app.get('/', function (req, res) {
+  res.send('A web For Testing ❤️✅️')
 })
 
-app.use('/admin', admin) // mount the sub app
+app.listen(3000)
