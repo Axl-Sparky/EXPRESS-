@@ -1,5 +1,6 @@
-import cheerio from 'cheerio'
-import fetch from 'node-fetch'
+const cheerio = require('cheerio');
+const fetch = require('fetch');
+
 
 function xnxxDownloader(t) {
   return new Promise((n, e) => {
