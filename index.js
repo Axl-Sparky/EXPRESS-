@@ -1,13 +1,13 @@
-import xnxxDownloader from '../func/xnxx.js'
+import cors from 'cors'
 import express from 'express'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-var router = express.Router()
+const app = express()
 
-router.get('/', async (req, res) => {
-  var query = req.query.url
-  if (!query) return res.json({ creator: 'AmeenInt', status: false, msg: 'url is required' })
-  var xdownload = await xnxxDownloader(query)
-  res.json(xdownload)
+app.get('/', function (req, res) {
+
+  app.use('/xnxxdl', xnxxdl)
 })
 
-export default router
+app.listen(3000)
