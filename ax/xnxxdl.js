@@ -9,4 +9,4 @@ router.get('/', async (req, res) => {
   res.json(xdownload)
 })
 
-export default router
+export default ax
