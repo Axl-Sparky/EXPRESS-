@@ -1,6 +1,5 @@
-import xnxxDownloader from '../func/xnxx.js'
-import express from 'express'
-
+const { xnxxDownloader } = require('../func/xnxx.js');
+const express = require('express');
 var router = express.Router()
 
 router.get('/', async (req, res) => {
