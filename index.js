@@ -1,8 +1,13 @@
-const express = require('express')
-const app = express()
-var hi = 'okey bye'
-app.get('/', function (req, res) {
-  res.send(hi)
+import xnxxDownloader from '../func/xnxx.js'
+import express from 'express'
+
+var router = express.Router()
+
+router.get('/', async (req, res) => {
+  var query = req.query.url
+  if (!query) return res.json({ creator: 'AmeenInt', status: false, msg: 'url is required' })
+  var xdownload = await xnxxDownloader(query)
+  res.json(xdownload)
 })
 
-app.listen(3000)
+export default router
