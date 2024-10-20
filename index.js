@@ -1,8 +1,8 @@
-import cors from 'cors'
-import express from 'express'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import xnxxdl from './ax/xnxxdl.js'
+const cors = require('cors');
+const express = require('express');
+const path = require ('path');
+const { fileURLToPath }  = require('url');
+const xnxxdl = require('./ax/xnxxdl.js');
 
 const app = express()
 app.set('json spaces', 2)
