@@ -30,7 +30,7 @@ var r = cheerio.load(e, {
             thumbSlideBig: l.match("html5player.setThumbSlideBig\\('(.*?)'\\);")[1],
           }
         n({
-          creator: 'AmeenInt',
+          creator: 'AjsalSparky',
           status: !0,
           title: o,
           URL: t,
