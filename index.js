@@ -10,11 +10,11 @@ app.set('json spaces', 2)
 
 app.get('/', (req, res) => {
   res.json({
-    creator: 'Ameen Int'
+    creator: 'Unknown One'
   })})
   
 app.use('/xnx', xnxxdl) // ninak vende name /xnx mattiya madhi
 
 app.listen(8080, () => {
-  console.log('api by ameen. running on 8080')
+  console.log('running')
 })
