@@ -1,11 +1,11 @@
 const cors = require('cors');
 const express = require('express');
-const path = require('path');
+//const path = require('path');
 
-const { fileURLToPath } = require('url');
+//const { fileURLToPath } = require('url');
 const xnxxdl = require('./ax/xnxxdl.js');
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+//const __filename = fileURLToPath(import.meta.url)
+//const __dirname = path.dirname(__filename)
 const app = express()
 app.set('json spaces', 2)
 
