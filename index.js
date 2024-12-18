@@ -3,7 +3,7 @@ const fetch = require('node-fetch'); // For making HTTP requests
 const app = express();
 
 // Set JSON formatting for response
-//app.set('json spaces', 2);
+app.set('json spaces', 2);
 
 // Define the /sfys route to handle requests
 app.get('/sfys', async (req, res) => {
