@@ -34,7 +34,7 @@ app.get('/sfys', async (req, res) => {
     // Send the download URL in the response to the client
     res.json({
       track: query,        // You can return the query or track info
-      download_url: data.download_url  // The download URL from the external API
+      download_url: data.data  // The download URL from the external API
     });
 
   } catch (error) {
