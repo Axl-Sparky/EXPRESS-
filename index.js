@@ -1,5 +1,5 @@
 import express from = 'express';
-import fetch from 'node-fetch'; // For making HTTP requests
+import('node-fetch').then(fetch => { // For making HTTP requests
 const app = express();
 
 // Set JSON formatting for response
@@ -17,7 +17,7 @@ app.get('/sfys', async (req, res) => {
     // Make a request to the external API with the provided query
     const apiUrl = `https://ameen-api.vercel.app/sfys?query=${encodeURIComponent(query)}`;
     const response = await fetch(apiUrl);
-
+  
     // If the response is not OK, return an error
     if (!response.ok) {
       return res.status(404).json({ error: 'Unable to fetch data from external API' });
@@ -47,4 +47,5 @@ app.get('/sfys', async (req, res) => {
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
+});
 });
