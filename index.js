@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 import('node-fetch').then(fetch => { // For making HTTP requests
 const app = express();
 
