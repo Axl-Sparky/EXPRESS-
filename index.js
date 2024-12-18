@@ -1,5 +1,5 @@
 const express = require('express');
-const fetch = require('node-fetch'); // For making HTTP requests
+import fetch from 'node-fetch'; // For making HTTP requests
 const app = express();
 
 // Set JSON formatting for response
