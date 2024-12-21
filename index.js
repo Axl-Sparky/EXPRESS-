@@ -15,7 +15,7 @@ app.get('/sfys', async (req, res) => {
 
   try {
     // Make a request to the external API with the provided query
-    const apiUrl = `https://ameen-api.vercel.app/sfys?query=${encodeURIComponent(query)}`;
+    const apiUrl = `https://ameen-api.vercel.app/sfys?query=${query}`;
     const response = await fetch(apiUrl);
   
     // If the response is not OK, return an error
