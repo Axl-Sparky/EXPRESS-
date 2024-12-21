@@ -2,7 +2,7 @@ import express from 'express';
 
 const app = express();
 
-const fetch = require('node-fetch')
+import fetch from 'node-fetch';
 
 // Set JSON formatting for response
 app.set('json spaces', 2);
