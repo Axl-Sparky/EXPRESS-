@@ -35,7 +35,7 @@ app.get('/sfys', async (req, res) => {
     return res.status(400).json({ error: 'No query parameter provided' });
   }
 
-{
+try {
 
     
     // Make a request to the external API with the provided query
