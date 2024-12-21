@@ -36,7 +36,7 @@ const api = ("https://ameen-api.vercel.app/sfys?query=")
 const query = req.query.query;  // This is the query parameter
 const url = (api + query)
 
-  const response = await gethAxl(url)
+  const response =  gethAxl(url)
   const resi = response.data
   //const resdata 
   
