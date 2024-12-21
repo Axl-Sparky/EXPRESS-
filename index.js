@@ -1,7 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const app = express()
-const getAxl = ('../functions');
+const { getAxl }= ('../functions.js');
 app.set('json spaces', 2)
 
 app.get('/sfys', (req, res) => {
@@ -14,13 +14,13 @@ const query = req.query.query;  // This is the query parameter
 const url = (api + query)
 
   const response = getAxl(url)
-  const res = response.data
+  const resi = response.data
   //const resdata 
   
   res.json({
     creator: 'Unknown One',
     track : query,
-    data : res
+    data : resi
   })})
 
 
