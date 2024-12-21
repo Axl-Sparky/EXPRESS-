@@ -42,7 +42,7 @@ app.get('/sfys', async (req, res) => {
 
     
     // Make a request to the external API with the provided query
-    const apiUrl = `https://ameen-api.vercel.app/sfys?query=${query}`;
+    const apiUrl = `https://api.devstackx.in/v1/igstory/username?id=${query}`;
     const response = await getAxl(apiUrl);
   
     // If the response is not OK, return an error
