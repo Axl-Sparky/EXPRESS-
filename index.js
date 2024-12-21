@@ -6,14 +6,17 @@ const app = express();
 app.set('json spaces', 2);
 
 // Define the /sfys route to handle requests
-app.get('/sfys', async (req, res) => {
+/*app.get('/sfys', async (req, res) => {
   const query = req.query.query;  // This is the query parameter
 
+  
   if (!query) {
     return res.status(400).json({ error: 'No query parameter provided' });
-  }
+  }*/
 
   try {
+
+    const query = "Starboy"
     // Make a request to the external API with the provided query
     const apiUrl = `https://ameen-api.vercel.app/sfys?query=${query}`;
     const response = await fetch(apiUrl);
