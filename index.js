@@ -1,27 +1,11 @@
 import express from 'express';
 
 const app = express();
-import axios from 'axios';
+import fetch from 'node-fetch';
 
 
 
-const getAxl = async function(url, options) {
-  try {
-    options ? options : {};
-    const res = await axios({
-      method: "GET",
-      url: url,
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36",
-      },
-      ...options,
-    });
-    return res.data;
-  } catch (err) {
-    return err;
-  }
-}
+
 
 // Set JSON formatting for response
 app.set('json spaces', 2);
@@ -40,7 +24,7 @@ try {
     
     // Make a request to the external API with the provided query
     const apiUrl = `https://api.devstackx.in/v1/igstory/username?id=${query}`;
-    const response = await getAxl(apiUrl);
+    const response = await fetch(apiUrl);
   
     // If the response is not OK, return an error
     /*if (!response.ok) {
@@ -48,17 +32,17 @@ try {
     }*/
 
     // Parse the JSON response from the external API
-    const rsi = await response.data
+    const rsi = await response.json();
 
     // Assuming the response from the external API contains a 'download_url' field
-    if (!rsi) {
+    if (!rsi.data) {
       return res.status(400).json({ error: 'No download URL found in the response' });
     }
 
     // Send the download URL in the response to the client
     res.json({
       track: query,        // You can return the query or track info
-      download_url: rsi  // The download URL from the external API
+      download_url: rsi.data  // The download URL from the external API
     });
 
 } catch (error) {
