@@ -4,7 +4,7 @@ const app = express()
 app.set('json spaces', 2)
 
 app.get('/sfys', (req, res) => {
-
+const fetch = ('node-fetch')
 
 const api = ("https://ameen-api.vercel.app/sfys?query=")
  
