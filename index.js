@@ -8,7 +8,7 @@ app.get('/sfys', (req, res) => {
 const query = req.query.query;  // This is the query parameter
 
   res.json({
-    creator: 'Unknown One'
+    creator: 'Unknown One',
     track : query 
   })})
 
