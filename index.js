@@ -14,7 +14,7 @@ app.get('/sfys', async (req, res) => {
     return res.status(400).json({ error: 'No query parameter provided' });
   }
 
-  try {
+//  try {
 
     
     // Make a request to the external API with the provided query
@@ -40,10 +40,10 @@ app.get('/sfys', async (req, res) => {
       download_url: rsi  // The download URL from the external API
     });
 
-  } catch (error) {
+  /*} catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while fetching track details' });
-  }
+  }*/
 });
 
 // Start the server on port 8080 or the environment port
