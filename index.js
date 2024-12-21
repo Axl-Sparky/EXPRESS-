@@ -43,9 +43,9 @@ try {
     const response = await getAxl(apiUrl);
   
     // If the response is not OK, return an error
-    if (!response.ok) {
+    /*if (!response.ok) {
       return res.status(404).json({ error: 'Unable to fetch data from external API' });
-    }
+    }*/
 
     // Parse the JSON response from the external API
     const rsi = await response.data
