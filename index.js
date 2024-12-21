@@ -7,7 +7,7 @@ app.set('json spaces', 2);
 
 // Define the /sfys route to handle requests
 app.get('/sfys', async (req, res) => {
-  const query = req.query.query;  // This is the query parameter
+  const query = req.query;  // This is the query parameter
 
   
   if (!query) {
