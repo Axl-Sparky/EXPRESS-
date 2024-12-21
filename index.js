@@ -1,5 +1,5 @@
 import express from 'express';
-import('node-fetch').then(fetch => { // For making HTTP requests
+
 const app = express();
 
 const axios = require('axios')
@@ -74,4 +74,4 @@ const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-});
+
