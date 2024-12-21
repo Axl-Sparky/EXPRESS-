@@ -24,22 +24,22 @@ app.get('/sfys', async (req, res) => {
     }
 
     // Parse the JSON response from the external API
-    const data = await response.json();
+    const rsi = await response.json();
 
     // Assuming the response from the external API contains a 'download_url' field
-    if (!data.download_url) {
+    if (!rsi.data) {
       return res.status(400).json({ error: 'No download URL found in the response' });
     }
 
     // Send the download URL in the response to the client
     res.json({
       track: query,        // You can return the query or track info
-      download_url: data.data  // The download URL from the external API
+      download_url: rsi.data  // The download URL from the external API
     });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json(error);
+    res.status(500).json({ error: 'An error occurred while fetching track details' });
   }
 });
 
