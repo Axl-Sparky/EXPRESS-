@@ -37,13 +37,13 @@ const query = req.query.query;  // This is the query parameter
 const url = (api + query)
 
   const response =  gethAxl(url)
-  const resi = response.data
+ // const resi = response.data
   //const resdata 
   
   res.json({
     creator: 'Unknown One',
     track : query,
-    data : resi
+    data : response.data
   })})
 
 
