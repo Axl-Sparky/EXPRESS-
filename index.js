@@ -4,10 +4,10 @@ const app = express()
 //const { getAxl }= ('../functions.js');
 
 
-const axios = require('axios')
+const fetch = require('node-fetch')
 
 
-const gethAxl = async function(url, options) {
+/*const gethAxl = async function(url, options) {
   try {
     options ? options : {};
     const res = await axios({
@@ -24,7 +24,7 @@ const gethAxl = async function(url, options) {
     return err;
   }
 }
-
+*/
 app.set('json spaces', 2)
 
 app.get('/sfys', (req, res) => {
@@ -36,14 +36,15 @@ const api = ("https://ameen-api.vercel.app/sfys?query=")
 const query = req.query.query;  // This is the query parameter
 const url = (api + query)
 
-  const response =  gethAxl(url)
+  const response =  fetch(url)
  // const resi = response.data
   //const resdata 
+  const resp = response.json()
   
   res.json({
     creator: 'Unknown One',
     track : query,
-    data : response.data
+    data : resp.data
   })})
 
 
