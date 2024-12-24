@@ -13,12 +13,12 @@ app.set('json spaces', 2)
 app.get('/sfys', (req, res) => {
 const query = req.query.query
 
-const search = await yts(query)
+const search = yts(query)
 const data = search.videos[0];
 const yturl = data.url
 
 
-let down = await fg.yta(yturl)
+let down =  fg.yta(yturl)
 let downloadUrl = down.dl_url
   
   res.json({
