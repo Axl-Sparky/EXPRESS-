@@ -9,7 +9,7 @@ const app = express()
 app.set('json spaces', 2)
 
 app.get('/sfys', (req, res) => {
-
+const query = req.query.query
   const resp = response.json()
   
   res.json({
