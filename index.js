@@ -12,8 +12,8 @@ app.set('json spaces', 2)
 
 app.get('/sfys', (req, res) => {
 const query = req.query.query
-
-const search = yts(query)
+const q = ("starboy")
+const search = yts(q)
 const data = search.videos[0];
 const yturl = data.url
 
