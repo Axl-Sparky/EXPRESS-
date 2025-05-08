@@ -1,29 +1,29 @@
-// api/update.js
+const { json } = require('micro');
 
-let latestStatus = null;
+let botStatus = {
+  status: 'offline',
+  activity: 'Not connected',
+  type: 0,
+  url: null,
+  timestamp: new Date().toISOString()
+};
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method === 'POST') {
-    const data = req.body;
-    if (data) {
-      latestStatus = {
-        ...data,
-        timestamp: Date.now(),
+    try {
+      const data = await json(req);
+      botStatus = {
+        status: data.status || 'online',
+        activity: data.activity || 'Unknown',
+        type: data.type || 0,
+        url: data.url || null,
+        timestamp: data.timestamp || new Date().toISOString()
       };
-      return res.status(200).json({ success: true });
-    } else {
-      return res.status(400).json({ error: 'No data received' });
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err.message };
     }
+  } else {
+    res.status(405).json({ error: 'Method not allowed' });
   }
-
-  if (req.method === 'GET') {
-    return res.status(200).json(latestStatus || {
-      status: 'Offline',
-      activity: 'No data yet',
-      type: 'N/A',
-      timestamp: null
-    });
-  }
-
-  res.status(405).end(); // Method Not Allowed
-}
+};
