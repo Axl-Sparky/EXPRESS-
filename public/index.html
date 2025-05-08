@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bot Activity</title>
+</head>
+<body>
+  <h1>Current Bot Status</h1>
+  <pre id="data">Loading...</pre>
+
+  <script>
+    async function load() {
+      const res = await fetch('/data.json');
+      const data = await res.json();
+      document.getElementById('data').innerText = JSON.stringify(data, null, 2);
+    }
+    setInterval(load, 3000);
+    load();
+  </script>
+</body>
+</html>
