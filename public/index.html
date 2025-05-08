@@ -1,20 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Bot Activity</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Current Bot Status</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+    }
+    h1 {
+      color: #333;
+    }
+    .status {
+      font-size: 1.2rem;
+      color: #007bff;
+    }
+  </style>
 </head>
 <body>
   <h1>Current Bot Status</h1>
-  <pre id="data">Loading...</pre>
+  <p class="status" id="status">Loading...</p>
 
   <script>
-    async function load() {
-      const res = await fetch('/data.json');
-      const data = await res.json();
-      document.getElementById('data').innerText = JSON.stringify(data, null, 2);
-    }
-    setInterval(load, 3000);
-    load();
+    fetch('/api/status')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('status').textContent = data.status || "No status available.";
+      })
+      .catch(() => {
+        document.getElementById('status').textContent = "Failed to load status.";
+      });
   </script>
 </body>
 </html>
