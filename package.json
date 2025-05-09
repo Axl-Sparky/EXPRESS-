@@ -1,54 +1,43 @@
 {
   "name": "discord-bot-status-page",
-  "version": "1.0.2",
-  "private": true,
+  "version": "1.0.1",
   "description": "Vercel status page for Discord bot monitoring",
   "main": "api/status.js",
   "scripts": {
     "start": "vercel dev",
     "dev": "vercel dev",
     "deploy": "vercel --prod",
-    "test": "echo \"Test endpoint: curl -X POST https://your-vercel-url/api/test\" && exit 0"
+    "test": "curl -X POST http://localhost:3000/api/test"
   },
   "dependencies": {
-    "micro": "^9.4.1",
-    "micro-cors": "^0.1.1",
-    "micro-ratelimit": "^0.2.2",
-    "node-fetch": "^3.3.2"
+    "micro": "9.3.4",
+    "micro-ratelimit": "0.2.0",
+    "node-fetch": "2.6.7",
+    "cors": "2.8.5"
   },
   "devDependencies": {
-    "vercel": "^32.5.6"
+    "vercel": "28.4.12"
   },
   "engines": {
-    "node": "18.x"
+    "node": "14.x",
+    "npm": "6.x"
   },
-  "resolutions": {
-    "micro": "^9.4.1"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "files": [
+    "api/**/*.js",
+    "public/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/your-repo.git"
   },
   "keywords": [
     "discord",
     "bot",
     "status",
-    "monitoring"
+    "vercel"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "Your Name",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/your-repo.git"
-  },
   "bugs": {
     "url": "https://github.com/yourusername/your-repo/issues"
   },
