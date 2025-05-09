@@ -1,34 +1,29 @@
 {
   "name": "discord-bot-status-page",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Vercel status page for Discord bot monitoring",
   "main": "api/status.js",
   "scripts": {
     "start": "vercel dev",
     "dev": "vercel dev",
     "deploy": "vercel --prod",
-    "test": "curl -X POST http://localhost:3000/api/test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "micro": "9.3.4",
-    "micro-ratelimit": "0.2.0",
-    "node-fetch": "2.6.7",
-    "cors": "2.8.5"
+    "micro": "^9.3.4",
+    "micro-ratelimit": "^0.2.0",
+    "node-fetch": "^2.6.7",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
-    "vercel": "28.4.12"
+    "vercel": "^28.4.12"
   },
   "engines": {
-    "node": "14.x",
-    "npm": "6.x"
+    "node": ">=14.x"
   },
-  "files": [
-    "api/**/*.js",
-    "public/**/*"
-  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/your-repo.git"
+    "url": "git+https://github.com/yourusername/your-repo.git"
   },
   "keywords": [
     "discord",
@@ -41,5 +36,11 @@
   "bugs": {
     "url": "https://github.com/yourusername/your-repo/issues"
   },
-  "homepage": "https://github.com/yourusername/your-repo#readme"
+  "homepage": "https://github.com/yourusername/your-repo#readme",
+  "now": {
+    "alias": "your-bot-status-page",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
 }
