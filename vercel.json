@@ -4,7 +4,7 @@
   "rewrites": [
     { "source": "/", "destination": "/public/index.html" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/sparky", "destination": "/andi/login.html" }
+    { "source": "/sparky", "destination": "/sparky/index.html" }
   ],
   "env": {
     "NODE_ENV": "production"
