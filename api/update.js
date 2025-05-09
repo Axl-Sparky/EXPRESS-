@@ -1,7 +1,8 @@
+// api/update.js
 const { json, send } = require('micro');
 const rateLimit = require('micro-ratelimit');
 
-// Simple in-memory store (replace with database if needed)
+// Simple in-memory store
 let botStatus = {
   status: 'offline',
   activity: 'Not connected',
@@ -10,37 +11,44 @@ let botStatus = {
   timestamp: new Date().toISOString()
 };
 
-// Apply rate limiting (10 requests per minute per IP)
+// Rate limiting (15 requests per minute)
 const limit = rateLimit({
   window: 60000,
-  limit: 10,
+  limit: 15,
   headers: true
 });
 
 module.exports = limit(async (req, res) => {
   try {
+    console.log('Incoming request:', req.method, req.url);
+    
     if (req.method === 'POST') {
       const data = await json(req);
+      console.log('Received data:', JSON.stringify(data, null, 2));
       
       // Basic validation
-      if (!data.activity || typeof data.type === 'undefined') {
-        return send(res, 400, { error: 'Invalid status data' });
+      if (!data || typeof data !== 'object') {
+        return send(res, 400, { error: 'Invalid request body' });
       }
-      
+
+      // Update status
       botStatus = {
         botName: data.botName || 'Unknown Bot',
         status: data.status || 'online',
-        activity: data.activity,
-        type: data.type,
+        activity: data.activity || 'Unknown',
+        type: data.type || 0,
         url: data.url || null,
         timestamp: data.timestamp || new Date().toISOString()
       };
       
-      return { success: true, updated: botStatus };
-    } else if (req.method === 'GET') {
+      console.log('Updated status:', botStatus);
+      return { success: true, status: botStatus };
+    }
+    else if (req.method === 'GET') {
       // Allow GET requests for testing
       return botStatus;
-    } else {
+    }
+    else {
       return send(res, 405, { error: 'Method not allowed' });
     }
   } catch (err) {
