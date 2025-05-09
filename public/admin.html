@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VX-OFC Dashboard</title>
+</head>
+<body style="background:#111;color:#0f0;padding:20px;">
+  <h2>VX-OFC Admin Panel</h2>
+  <p>Status: Online</p>
+  <p>Ping: <span id="ping"></span> ms</p>
+  <p>Guilds: <span id="guilds"></span></p>
+  <p>Users: <span id="users"></span></p>
+
+  <script>
+    if (localStorage.getItem("admin") !== "true") {
+      window.location.href = "/login.html";
+    }
+
+    async function loadData() {
+      const res = await fetch('http://your-bot-domain:11044/status');
+      const data = await res.json();
+      document.getElementById("ping").innerText = data.data.ping;
+      document.getElementById("guilds").innerText = data.data.guildCount;
+      document.getElementById("users").innerText = data.data.userCount;
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
