@@ -3,14 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Discord Bot Status</title>
+  <title>VX-OFC Bot Status</title>
   <style>
+    :root {
+      --discord-dark: #36393f;
+      --discord-darker: #2f3136;
+      --discord-darkest: #202225;
+      --discord-light: #dcddde;
+      --discord-blue: #5865f2;
+      --discord-green: #3ba55c;
+      --discord-red: #ed4245;
+      --discord-gray: #72767d;
+    }
+    
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #36393f;
-      color: #ffffff;
+      font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: var(--discord-dark);
+      color: var(--discord-light);
       margin: 0;
-      padding: 20px;
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,33 +29,35 @@
     }
     
     .container {
-      background-color: #2f3136;
+      background-color: var(--discord-darker);
       border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       padding: 30px;
-      width: 100%;
+      width: 90%;
       max-width: 600px;
+      margin: 20px;
     }
     
     h1 {
-      color: #7289da;
+      color: var(--discord-blue);
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
+      font-size: 28px;
     }
     
     .status-card {
-      background-color: #40444b;
-      border-radius: 6px;
+      background-color: var(--discord-darkest);
+      border-radius: 8px;
       padding: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     
     .status-item {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #4f545c;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--discord-gray);
     }
     
     .status-item:last-child {
@@ -55,66 +68,105 @@
     
     .status-label {
       font-weight: 600;
-      color: #b9bbbe;
+      color: var(--discord-gray);
     }
     
     .status-value {
       font-weight: 500;
+      text-align: right;
     }
     
     .online {
-      color: #3ba55c;
+      color: var(--discord-green);
     }
     
     .offline {
-      color: #ed4245;
+      color: var(--discord-red);
     }
     
     .loading {
       text-align: center;
-      color: #b9bbbe;
+      color: var(--discord-gray);
+      padding: 20px;
     }
     
     .last-updated {
       text-align: right;
-      font-size: 12px;
-      color: #72767d;
+      font-size: 13px;
+      color: var(--discord-gray);
       margin-top: 20px;
     }
     
     .refresh-btn {
-      background-color: #7289da;
+      background-color: var(--discord-blue);
       color: white;
       border: none;
       border-radius: 4px;
-      padding: 8px 16px;
+      padding: 12px;
       cursor: pointer;
       font-weight: 600;
       margin-top: 20px;
       width: 100%;
       transition: background-color 0.2s;
+      font-size: 16px;
     }
     
     .refresh-btn:hover {
-      background-color: #677bc4;
+      background-color: #4752c4;
+    }
+    
+    .bot-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: block;
+      object-fit: cover;
+      border: 3px solid var(--discord-blue);
+    }
+    
+    @media (max-width: 500px) {
+      .container {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      .status-item {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .status-value {
+        text-align: left;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Discord Bot Status</h1>
+    <img src="https://files.catbox.moe/m445ih.jpeg" alt="Bot Avatar" class="bot-avatar" id="bot-avatar">
+    <h1>VX-OFC Status Monitor</h1>
     
     <div id="status-container">
-      <div class="loading">Loading bot status...</div>
+      <div class="loading">Connecting to bot...</div>
     </div>
     
-    <button class="refresh-btn" onclick="fetchBotStatus()">Refresh Status</button>
+    <button class="refresh-btn" onclick="fetchBotStatus()">
+      <span id="refresh-text">Refresh Status</span>
+      <span id="refresh-spinner" style="display:none;">🔄 Refreshing...</span>
+    </button>
     
     <div class="last-updated" id="last-updated"></div>
   </div>
 
   <script>
+    // Format uptime from seconds to readable format
     function formatUptime(seconds) {
+      if (!seconds) return '0m';
+      
       const days = Math.floor(seconds / 86400);
       const hours = Math.floor((seconds % 86400) / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
@@ -127,11 +179,14 @@
       return result.join(' ') || '0m';
     }
     
+    // Format date to local string
     function formatDate(dateString) {
+      if (!dateString) return 'Unknown';
       const date = new Date(dateString);
       return date.toLocaleString();
     }
     
+    // Update the status display
     function updateStatusUI(data) {
       const container = document.getElementById('status-container');
       
@@ -142,6 +197,10 @@
               <span class="status-label">Status:</span>
               <span class="status-value offline">❌ Offline</span>
             </div>
+            <div class="status-item">
+              <span class="status-label">Error:</span>
+              <span class="status-value offline">Failed to connect to bot</span>
+            </div>
           </div>
         `;
         return;
@@ -149,6 +208,11 @@
       
       container.innerHTML = `
         <div class="status-card">
+          <div class="status-item">
+            <span class="status-label">Bot Name:</span>
+            <span class="status-value">${data.botName || 'VX-OFC'}</span>
+          </div>
+          
           <div class="status-item">
             <span class="status-label">Status:</span>
             <span class="status-value ${data.online ? 'online' : 'offline'}">
@@ -168,7 +232,7 @@
             </div>
             
             <div class="status-item">
-              <span class="status-label">Guilds:</span>
+              <span class="status-label">Servers:</span>
               <span class="status-value">${data.guildCount}</span>
             </div>
             
@@ -188,13 +252,13 @@
             </div>
             
             <div class="status-item">
-              <span class="status-label">Last Started:</span>
-              <span class="status-value">${formatDate(data.lastStart)}</span>
+              <span class="status-label">Version:</span>
+              <span class="status-value">${data.version || '1.0.0'}</span>
             </div>
             
             <div class="status-item">
-              <span class="status-label">Version:</span>
-              <span class="status-value">${data.version}</span>
+              <span class="status-label">Last Started:</span>
+              <span class="status-value">${formatDate(data.lastStart)}</span>
             </div>
           ` : ''}
         </div>
@@ -204,23 +268,45 @@
         `Last updated: ${new Date().toLocaleTimeString()}`;
     }
     
+    // Fetch bot status from your server
     async function fetchBotStatus() {
+      const refreshBtn = document.querySelector('.refresh-btn');
+      const refreshText = document.getElementById('refresh-text');
+      const refreshSpinner = document.getElementById('refresh-spinner');
+      
       try {
-        // Replace with your bot server URL or Vercel API route if using a proxy
-        const response = await fetch('http://your-bot-server-ip:7965/status');
+        // Show loading state
+        refreshText.style.display = 'none';
+        refreshSpinner.style.display = 'inline';
+        refreshBtn.disabled = true;
+        
+        // Replace with your bot's IP and port
+        const response = await fetch('http://172.232.103.8:11044/status');
+        
+        if (!response.ok) {
+          throw new Error('Bot responded with error');
+        }
+        
         const data = await response.json();
         updateStatusUI(data.data);
       } catch (error) {
         console.error('Error fetching bot status:', error);
         updateStatusUI(null);
+      } finally {
+        // Restore button state
+        refreshText.style.display = 'inline';
+        refreshSpinner.style.display = 'none';
+        refreshBtn.disabled = false;
       }
     }
     
-    // Initial fetch
-    fetchBotStatus();
-    
-    // Auto-refresh every 10 seconds
-    setInterval(fetchBotStatus, 10000);
+    // Initial fetch when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchBotStatus();
+      
+      // Auto-refresh every 15 seconds
+      setInterval(fetchBotStatus, 15000);
+    });
   </script>
 </body>
 </html>
