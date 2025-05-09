@@ -34,7 +34,7 @@
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       padding: 30px;
       width: 90%;
-      max-width: 600px;
+      max-width: 800px;
       margin: 20px;
     }
     
@@ -125,6 +125,42 @@
       border: 3px solid var(--discord-blue);
     }
     
+    /* NEW: Heatmap styles */
+    .heatmap-container {
+      margin-top: 20px;
+    }
+    
+    .heatmap-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--discord-gray);
+    }
+    
+    .heatmap {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 5px;
+    }
+    
+    .heatmap-hour {
+      background-color: var(--discord-dark);
+      padding: 5px;
+      text-align: center;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    
+    /* NEW: Command stats styles */
+    .command-stats {
+      margin-top: 20px;
+    }
+    
+    .command-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    
     @media (max-width: 500px) {
       .container {
         padding: 20px;
@@ -141,6 +177,10 @@
       
       .status-value {
         text-align: left;
+      }
+      
+      .heatmap {
+        grid-template-columns: repeat(6, 1fr);
       }
     }
   </style>
@@ -186,6 +226,26 @@
         return;
       }
       
+      // NEW: Prepare heatmap visualization
+      const maxHeatmapValue = Math.max(...data.activityHeatmap);
+      const heatmapHTML = data.activityHeatmapFormatted.map(item => `
+        <div class="heatmap-hour" style="background-color: rgba(88, 101, 242, ${item.count/maxHeatmapValue})" 
+             title="${item.hour}: ${item.count} messages">
+          ${item.hour.split(':')[0]}
+        </div>
+      `).join('');
+      
+      // NEW: Prepare command stats
+      const commandStatsHTML = data.commandStats ? Object.entries(data.commandStats)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([cmd, count]) => `
+          <div class="command-item">
+            <span>${cmd}</span>
+            <span>${count} uses</span>
+          </div>
+        `).join('') : '';
+      
       container.innerHTML = `
         <div class="status-card">
           <div class="status-item">
@@ -194,26 +254,53 @@
               ${data.online ? '✅ Online' : '❌ Offline'}
             </span>
           </div>
+          
           ${data.online ? `
             <div class="status-item">
               <span class="status-label">Uptime:</span>
               <span class="status-value">${formatUptime(data.uptime)}</span>
             </div>
+            
             <div class="status-item">
               <span class="status-label">Ping:</span>
               <span class="status-value">${data.ping}ms</span>
             </div>
+            
             <div class="status-item">
               <span class="status-label">Servers:</span>
               <span class="status-value">${data.guildCount}</span>
             </div>
+            
             <div class="status-item">
               <span class="status-label">Users:</span>
               <span class="status-value">${data.userCount}</span>
             </div>
+            
+            <div class="status-item">
+              <span class="status-label">Memory Usage:</span>
+              <span class="status-value">${data.memoryUsage}</span>
+            </div>
+            
+            <!-- NEW: Command Stats -->
+            <div class="command-stats">
+              <div class="status-label">Top Commands:</div>
+              ${commandStatsHTML || '<div>No command data yet</div>'}
+            </div>
+            
+            <!-- NEW: Activity Heatmap -->
+            <div class="heatmap-container">
+              <div class="status-label">Activity Heatmap (24h):</div>
+              <div class="heatmap">${heatmapHTML}</div>
+            </div>
+            
+            <div class="status-item">
+              <span class="status-label">Current Activity:</span>
+              <span class="status-value">${data.currentActivity?.name || 'None'}</span>
+            </div>
           ` : ''}
         </div>
       `;
+      
       document.getElementById('last-updated').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
     }
 
