@@ -147,7 +147,7 @@
 </head>
 <body>
   <div class="container">
-    <img src="https://files.catbox.moe/m445ih.jpeg" alt="Bot Avatar" class="bot-avatar" id="bot-avatar">
+    <img src="https://files.catbox.moe/m445ih.jpeg" alt="Bot Avatar" class="bot-avatar">
     <h1>VX-OFC Status Monitor</h1>
     
     <div id="status-container">
@@ -163,30 +163,14 @@
   </div>
 
   <script>
-    // Format uptime from seconds to readable format
     function formatUptime(seconds) {
       if (!seconds) return '0m';
-      
       const days = Math.floor(seconds / 86400);
       const hours = Math.floor((seconds % 86400) / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
-      
-      let result = [];
-      if (days > 0) result.push(`${days}d`);
-      if (hours > 0) result.push(`${hours}h`);
-      if (minutes > 0) result.push(`${minutes}m`);
-      
-      return result.join(' ') || '0m';
+      return [days > 0 ? `${days}d` : '', hours > 0 ? `${hours}h` : '', minutes > 0 ? `${minutes}m` : ''].filter(Boolean).join(' ') || '0m';
     }
-    
-    // Format date to local string
-    function formatDate(dateString) {
-      if (!dateString) return 'Unknown';
-      const date = new Date(dateString);
-      return date.toLocaleString();
-    }
-    
-    // Update the status display
+
     function updateStatusUI(data) {
       const container = document.getElementById('status-container');
       
@@ -197,10 +181,6 @@
               <span class="status-label">Status:</span>
               <span class="status-value offline">❌ Offline</span>
             </div>
-            <div class="status-item">
-              <span class="status-label">Error:</span>
-              <span class="status-value offline">Failed to connect to bot</span>
-            </div>
           </div>
         `;
         return;
@@ -209,104 +189,59 @@
       container.innerHTML = `
         <div class="status-card">
           <div class="status-item">
-            <span class="status-label">Bot Name:</span>
-            <span class="status-value">${data.botName || 'VX-OFC'}</span>
-          </div>
-          
-          <div class="status-item">
             <span class="status-label">Status:</span>
             <span class="status-value ${data.online ? 'online' : 'offline'}">
               ${data.online ? '✅ Online' : '❌ Offline'}
             </span>
           </div>
-          
           ${data.online ? `
             <div class="status-item">
               <span class="status-label">Uptime:</span>
               <span class="status-value">${formatUptime(data.uptime)}</span>
             </div>
-            
             <div class="status-item">
               <span class="status-label">Ping:</span>
               <span class="status-value">${data.ping}ms</span>
             </div>
-            
             <div class="status-item">
               <span class="status-label">Servers:</span>
               <span class="status-value">${data.guildCount}</span>
             </div>
-            
             <div class="status-item">
               <span class="status-label">Users:</span>
               <span class="status-value">${data.userCount}</span>
             </div>
-            
-            <div class="status-item">
-              <span class="status-label">Commands:</span>
-              <span class="status-value">${data.commandsLoaded}</span>
-            </div>
-            
-            <div class="status-item">
-              <span class="status-label">Activity:</span>
-              <span class="status-value">${data.currentActivity?.name || 'None'}</span>
-            </div>
-            
-            <div class="status-item">
-              <span class="status-label">Version:</span>
-              <span class="status-value">${data.version || '1.0.0'}</span>
-            </div>
-            
-            <div class="status-item">
-              <span class="status-label">Last Started:</span>
-              <span class="status-value">${formatDate(data.lastStart)}</span>
-            </div>
           ` : ''}
         </div>
       `;
-      
-      document.getElementById('last-updated').textContent = 
-        `Last updated: ${new Date().toLocaleTimeString()}`;
+      document.getElementById('last-updated').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
     }
-    
-    // Fetch bot status from your server
+
     async function fetchBotStatus() {
-      const refreshBtn = document.querySelector('.refresh-btn');
       const refreshText = document.getElementById('refresh-text');
       const refreshSpinner = document.getElementById('refresh-spinner');
       
       try {
-        // Show loading state
         refreshText.style.display = 'none';
         refreshSpinner.style.display = 'inline';
-        refreshBtn.disabled = true;
         
-        // Replace with your bot's IP and port
-        const response = await fetch('http://172.232.103.8:11044/status');
-        
-        if (!response.ok) {
-          throw new Error('Bot responded with error');
-        }
-        
+        const response = await fetch('/api/bot-status');
+        if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         updateStatusUI(data.data);
       } catch (error) {
-        console.error('Error fetching bot status:', error);
+        console.error('Error:', error);
         updateStatusUI(null);
       } finally {
-        // Restore button state
         refreshText.style.display = 'inline';
         refreshSpinner.style.display = 'none';
-        refreshBtn.disabled = false;
       }
     }
-    
-    // Initial fetch when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchBotStatus();
-      
-      // Auto-refresh every 15 seconds
-      setInterval(fetchBotStatus, 15000);
-    });
+
+    // Initial load
+    fetchBotStatus();
+    // Auto-refresh every 15 seconds
+    setInterval(fetchBotStatus, 15000);
   </script>
 </body>
 </html>
