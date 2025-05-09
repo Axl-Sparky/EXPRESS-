@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sparky Admin Login</title>
+  <style>
+    body { background: #111; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #login { background: #222; padding: 20px; border-radius: 10px; text-align: center; }
+    input { padding: 10px; border: none; border-radius: 5px; margin: 10px 0; width: 100%; }
+    button { padding: 10px 20px; border: none; background: #0f0; color: black; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <div id="login">
+    <h2>Admin Login</h2>
+    <input type="password" id="password" placeholder="Enter password" />
+    <button onclick="login()">Login</button>
+    <p id="error" style="color:red;"></p>
+  </div>
+  <script src="./login.js"></script>
+</body>
+</html>
