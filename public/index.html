@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Bot Status</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #36393f;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .container {
+      background-color: #2f3136;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      width: 100%;
+      max-width: 600px;
+    }
+    
+    h1 {
+      color: #7289da;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .status-card {
+      background-color: #40444b;
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #4f545c;
+    }
+    
+    .status-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .status-label {
+      font-weight: 600;
+      color: #b9bbbe;
+    }
+    
+    .status-value {
+      font-weight: 500;
+    }
+    
+    .online {
+      color: #3ba55c;
+    }
+    
+    .offline {
+      color: #ed4245;
+    }
+    
+    .loading {
+      text-align: center;
+      color: #b9bbbe;
+    }
+    
+    .last-updated {
+      text-align: right;
+      font-size: 12px;
+      color: #72767d;
+      margin-top: 20px;
+    }
+    
+    .refresh-btn {
+      background-color: #7289da;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 20px;
+      width: 100%;
+      transition: background-color 0.2s;
+    }
+    
+    .refresh-btn:hover {
+      background-color: #677bc4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Discord Bot Status</h1>
+    
+    <div id="status-container">
+      <div class="loading">Loading bot status...</div>
+    </div>
+    
+    <button class="refresh-btn" onclick="fetchBotStatus()">Refresh Status</button>
+    
+    <div class="last-updated" id="last-updated"></div>
+  </div>
+
+  <script>
+    function formatUptime(seconds) {
+      const days = Math.floor(seconds / 86400);
+      const hours = Math.floor((seconds % 86400) / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      
+      let result = [];
+      if (days > 0) result.push(`${days}d`);
+      if (hours > 0) result.push(`${hours}h`);
+      if (minutes > 0) result.push(`${minutes}m`);
+      
+      return result.join(' ') || '0m';
+    }
+    
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleString();
+    }
+    
+    function updateStatusUI(data) {
+      const container = document.getElementById('status-container');
+      
+      if (!data) {
+        container.innerHTML = `
+          <div class="status-card">
+            <div class="status-item">
+              <span class="status-label">Status:</span>
+              <span class="status-value offline">❌ Offline</span>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = `
+        <div class="status-card">
+          <div class="status-item">
+            <span class="status-label">Status:</span>
+            <span class="status-value ${data.online ? 'online' : 'offline'}">
+              ${data.online ? '✅ Online' : '❌ Offline'}
+            </span>
+          </div>
+          
+          ${data.online ? `
+            <div class="status-item">
+              <span class="status-label">Uptime:</span>
+              <span class="status-value">${formatUptime(data.uptime)}</span>
+            </div>
+            
+            <div class="status-item">
+              <span class="status-label">Ping:</span>
+              <span class="status-value">${data.ping}ms</span>
+            </div>
+            
+            <div class="status-item">
+              <span class="status-label">Guilds:</span>
+              <span class="status-value">${data.guildCount}</span>
+            </div>
+            
+            <div class="status-item">
+              <span class="status-label">Users:</span>
+              <span class="status-value">${data.userCount}</span>
+            </div>
+            
+            <div class="status-item">
+              <span class="status-label">Commands:</span>
+              <span class="status-value">${data.commandsLoaded}</span>
+            </div>
+            
+            <div class="status-item">
+              <span class="status-label">Activity:</span>
+              <span class="status-value">${data.currentActivity?.name || 'None'}</span>
+            </div>
+            
+            <div class="status-item">
+              <span class="status-label">Last Started:</span>
+              <span class="status-value">${formatDate(data.lastStart)}</span>
+            </div>
+            
+            <div class="status-item">
+              <span class="status-label">Version:</span>
+              <span class="status-value">${data.version}</span>
+            </div>
+          ` : ''}
+        </div>
+      `;
+      
+      document.getElementById('last-updated').textContent = 
+        `Last updated: ${new Date().toLocaleTimeString()}`;
+    }
+    
+    async function fetchBotStatus() {
+      try {
+        // Replace with your bot server URL or Vercel API route if using a proxy
+        const response = await fetch('http://your-bot-server-ip:7965/status');
+        const data = await response.json();
+        updateStatusUI(data.data);
+      } catch (error) {
+        console.error('Error fetching bot status:', error);
+        updateStatusUI(null);
+      }
+    }
+    
+    // Initial fetch
+    fetchBotStatus();
+    
+    // Auto-refresh every 10 seconds
+    setInterval(fetchBotStatus, 10000);
+  </script>
+</body>
+</html>
